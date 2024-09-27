@@ -16,12 +16,12 @@ jobs:
             pkgarch: aarch64_generic
             target: rockchip
             subtarget: armv8
-            vermagic: "499975beb45ce503ac9e8ed1ea21699b"
+            vermagic: "776b9dfcee979f7597d95e599aad9fdd"
 
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: openwrt/openwrt
+          repository: openwrt/open≈wrt
           ref: v${{ matrix.build_env.tag }}
           fetch-depth: 0
 
@@ -45,6 +45,13 @@ jobs:
           wget https://downloads.openwrt.org/releases/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/feeds.buildinfo -O feeds.conf
           echo "src-git awgopenwrt https://github.com/yury-sannikov/awg-openwrt.git" >> ./feeds.conf
           ./scripts/feeds update && ./scripts/feeds install -a
+
+          echo "Install friendlyarm"
+          wget https://raw.githubusercontent.com/friendlyarm/build-env-on-ubuntu-bionic/master/install.sh
+          chmod 755 install.sh
+          sudo ./install.sh
+
+          echo "installing friendlyarm finished"
 
           # Setup config with AWG and dependencies
           wget https://downloads.openwrt.org/releases/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/config.buildinfo -O .config
